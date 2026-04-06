@@ -1,0 +1,19 @@
+# .gitignore - Fichiers a ne pas versionner
+
+#Environnement Python
+
+__pycache__/
+*.pyc
+venv/
+.env/
+
+#Modele Ml
+models/*.pkl
+
+#Fichiers DS
+.DS_Store
+Thumbs.db
+
+#IDE
+.vscode/
+.idea/
