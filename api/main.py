@@ -56,10 +56,10 @@ print(f"Classes : {list(model.classes_)}")
 def predict ( patients : PatientsInput ) :
 
     try:
-        sexe_enc = le_sexe . fit_transform ([ patients . sexe ]) [0]
+        sexe_enc = le_sexe . transform ([ patients . sexe ]) [0]
     except ValueError :
         return DiagnosticOutput (
-            diagnostic =" erreur ",
+            diagnostic ="erreur",
             probabilite =0.0 ,
             confiance =" aucune ",
             message = f" Sexe invalide : { patients . sexe }. Utiliser M ou F."
@@ -91,24 +91,24 @@ def predict ( patients : PatientsInput ) :
     proba_max = float ( probas . max () )
     # 4. Determiner le niveau de confiance
     if proba_max >= 0.7:
-            confiance = " haute "
+            confiance = "haute"
     elif proba_max >= 0.4:
-            confiance = " moyenne "
+            confiance = "moyenne"
     else :
-            confiance = " faible "
+            confiance = "faible"
     # 5. Generer la recommandation
     messages = {
-            " palu ": " Suspicion de paludisme . Consultez un medecin rapidement .",
-            " grippe ": " Suspicion de grippe . Repos et hydratation recommandes .",
-            " typh ": " Suspicion de typhoide . Consultation medicale necessaire .",
-            " sain ": "Pas de pathologie detectee . Continuez a surveiller ."
+            "palu": " Suspicion de paludisme . Consultez un medecin rapidement .",
+            "grippe": " Suspicion de grippe . Repos et hydratation recommandes .",
+            "typh": " Suspicion de typhoide . Consultation medicale necessaire .",
+            "sain": "Pas de pathologie detectee . Continuez a surveiller ."
     }
     # 6. Renvoyer le resultat
     return DiagnosticOutput (
         diagnostic = diagnostic ,
         probabilite = round ( proba_max , 2) ,
         confiance = confiance ,
-        message = messages . get ( diagnostic , " Consultez un medecin .")
+        message = messages . get ( diagnostic , "Consultez un medecin.")
     )
 
 
@@ -121,3 +121,16 @@ def model_info () :
           "classes_possibles": model.classes_.tolist(),
           "nombre_features": model.n_features_in_
      }
+
+
+from fastapi.middleware.cors import CORSMiddleware
+
+
+#Autoriser les requetes depuis le frontend
+app.add_middleware (
+     CORSMiddleware,
+     allow_origins=["*"],
+     allow_credentials=True,
+     allow_methods=["*"],
+     allow_headers=["*"],
+)
